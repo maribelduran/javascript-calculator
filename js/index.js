@@ -3,6 +3,7 @@ var calculator = {
 	total: 0,
 	previousEntry: [],
 	currentEntry: "0",
+	currentOperation: "",
 	add: function(num1, num2){
 		var sum = num1 + num2;
 		return sum;
@@ -25,44 +26,66 @@ var calculator = {
 		this.total = 0;
 		return this.total;
 	},
-	cancelEntry: function(){
-		this.currentEntry = 0;
-		return this.currentEntry;
+	clearEntry: function(){
+		this.currentEntry = "0";
+		//return this.currentEntry;
 	},
 	updateCurrEntry: function(val){
 
 		if (val == "+"){
-			if (this.curentEntry !== "+" || this.currentEntry !== "0"){
-				this.previousEntry.push(this.currenEntry);
-				this.currentEntry = "+";
-				return 1;
+			if (this.currentEntry!= "0" && this.currentEntry!=val) {
+				this.previousEntry.push(this.currentEntry);
+				this.currentEntry = val;
 			}
-			else{
-				return 0;
-			}
+			
 		}else if (typeof val == 'number' && val !==0){
-			if (this.previousEntry.length == 0){
+			if (this.currentEntry == "0"){
 				this.currentEntry = "";
 			}
-			var valToString = this.currentEntry.toString() + val.toString();
-			console.log("valToString is: " + valToString);
-			this.currentEntry = parseInt(valToString);
-			this.previousEntry.pop();
-			this.previousEntry.push(this.currentEntry);
+			if (this.currentEntry == "+"){
+				this.previousEntry.push(this.currentEntry);
+				this.currentEntry = val.toString();
+			}else{
+				var valToString = this.currentEntry.toString() + val.toString();
+				this.currentEntry = valToString;
+			}
 
 		}
 		else if(val == 0){
-			if (this.previousEntry.length != 0){
+			if (this.currentEntry != "0"){
+
+				if (this.currentEntry == "+"){
+				this.previousEntry.push("+");
+				this.currentEntry = "";
+			}
+
 				var valToString = this.currentEntry.toString() + val.toString();
 				console.log("valToString is: " + valToString);
-				this.currentEntry = parseInt(valToString);
-				this.previousEntry.pop();
-				this.previousEntry.push(this.currentEntry);
+				//this.currentEntry = parseInt(valToString);
+				this.currentEntry = valToString;
+				
 			}
 			//check that previousEntry is not empty or that we
 		}
 		else if(val == '.'){
+			//check that decimal character is not in the currentEntry input value
 			//there can only be one decimal in the currenEntry
+			var contains_decimal = /\./.test(this.currentEntry);
+			console.log(contains_decimal);
+			
+
+			if (!contains_decimal){
+
+				if (this.currentEntry == "+"){
+				this.previousEntry.push("+");
+				this.currentEntry = "0";
+			}
+				var valToString = this.currentEntry.toString() + val.toString();
+				console.log("valToString is: " + valToString);
+				//if I parseFloat the string value, it will not provide 0. in the input field. So want to keep it as a string for now.
+				//this.currentEntry = parseFloat(valToString);
+				this.currentEntry = valToString;
+			}	
 		}
 		else if(val == "-"){
 			//check that previousEntry is not empty
@@ -84,17 +107,31 @@ var calculator = {
 			this.currentEntry = "0";
 			this.previousEntry.splice(0,this.previousEntry.length);
 		}
-		console.log("previousEntry is: " + this.previousEntry[0]);
+		else if (val == "clearEntry"){
+			this.clearEntry();
+		}
+
+
+		this.currentOperation = "";
+		this.previousEntry.forEach(function(entry){
+			console.log(entry);
+			this.currentOperation += entry;
+			this.currentOperation += " ";
+
+		},this);
+		this.currentOperation += this.currentEntry;
+		console.log("CurrentOperation is: " + this.currentOperation);
 	}
-};
+	
+
+}
+
 
 var controller = {
 	updateEntry: function(val){
-		
-		console.log("Attempting to add " + val + " to current input value.");
 		calculator.updateCurrEntry(val);
 		view.displayEntry(calculator.currentEntry);
-		view.displayOperation(calculator.previousEntry);
+		view.displayOperation(calculator.previousEntry + calculator.currentEntry);
 	}
 };
 
@@ -110,8 +147,9 @@ var view = {
 		 var btn_7 = document.getElementById("btn_7");
 		 var btn_8 = document.getElementById("btn_8");
 		 var btn_9 = document.getElementById("btn_9");
-		 var btn_decimal = document.getElementById("btn_decimal");
+		 var btn_dec = document.getElementById("btn_dec");
 		 var btn_allClear = document.getElementById("btn_allClear");
+		 var btn_clearEntry = document.getElementById("btn_clearEntry");
 
 		 btn_0.addEventListener("click", function(){
 		 	controller.updateEntry(0);
@@ -143,17 +181,24 @@ var view = {
 		 btn_9.addEventListener("click", function(){
 		 	controller.updateEntry(9);
 		 });
+		 btn_dec.addEventListener("click", function(){
+		 	controller.updateEntry(".");
+		 });
 		 btn_add.addEventListener("click", function(){
 		 	controller.updateEntry("+");
 		 });
 		 btn_allClear.addEventListener("click", function(){
 		 	controller.updateEntry("allClear");
 		 });
+		 btn_clearEntry.addEventListener("click", function(){
+		 	controller.updateEntry("clearEntry");
+		 });
 
 	},
 	displayEntry: function(val){
 		var entry = document.getElementById("entryField");
 		entry.innerHTML = val;
+		console.log(val);
 	},
 	displayOperation: function(val){
 		var operation = document.getElementById("operation");
