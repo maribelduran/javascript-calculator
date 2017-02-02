@@ -23,8 +23,9 @@ var calculator = {
 
 	},
 	allClear: function(){
-		this.total = 0;
-		return this.total;
+		this.currentEntry = "0";
+		//this.currentOperation = "0";
+		this.previousEntry.splice(0,this.previousEntry.length);
 	},
 	clearEntry: function(){
 		this.currentEntry = "0";
@@ -33,18 +34,44 @@ var calculator = {
 	updateCurrEntry: function(val){
 
 		if (val == "+"){
-			if (this.currentEntry!= "0" && this.currentEntry!=val) {
+			//console.log("currentEntry is: " + this.currentEntry);
+			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="-" && this.currentEntry!="*" && this.currentEntry!="/"))  {
+				
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val;
 			}
 			
+		}
+		if (val == "-"){
+			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="*" && this.currentEntry!="/"))  {
+				this.previousEntry.push(this.currentEntry);
+				this.currentEntry = val;
+				//this.updateCurrentOperation(this.currentEntry);
+			}
+			
+		}
+		else if(val == "*"){
+			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="-" && this.currentEntry!="/"))  {
+				this.previousEntry.push(this.currentEntry);
+				this.currentEntry = val;
+				//this.updateCurrentOperation(this.currentEntry);
+			}
+
+		}else if (val == "/"){
+			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="-" && this.currentEntry!="*"))  {
+				this.previousEntry.push(this.currentEntry);
+				this.currentEntry = val;
+				//this.updateCurrentOperation(this.currentEntry);
+			}
+
 		}else if (typeof val == 'number' && val !==0){
 			if (this.currentEntry == "0"){
 				this.currentEntry = "";
 			}
-			if (this.currentEntry == "+"){
+			if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*"){
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val.toString();
+
 			}else{
 				var valToString = this.currentEntry.toString() + val.toString();
 				this.currentEntry = valToString;
@@ -53,50 +80,36 @@ var calculator = {
 		}
 		else if(val == 0){
 			if (this.currentEntry != "0"){
-
-				if (this.currentEntry == "+"){
-				this.previousEntry.push("+");
-				this.currentEntry = "";
-			}
+				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*"){
+					this.previousEntry.push(this.currentEntry);
+					this.currentEntry = "";
+					//this.updateCurrentOperation(this.currentEntry);
+				}
 
 				var valToString = this.currentEntry.toString() + val.toString();
-				console.log("valToString is: " + valToString);
-				//this.currentEntry = parseInt(valToString);
 				this.currentEntry = valToString;
-				
 			}
 			//check that previousEntry is not empty or that we
 		}
+	
 		else if(val == '.'){
 			//check that decimal character is not in the currentEntry input value
 			//there can only be one decimal in the currenEntry
 			var contains_decimal = /\./.test(this.currentEntry);
-			console.log(contains_decimal);
-			
 
 			if (!contains_decimal){
-
-				if (this.currentEntry == "+"){
-				this.previousEntry.push("+");
+				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*"){
+				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = "0";
 			}
 				var valToString = this.currentEntry.toString() + val.toString();
-				console.log("valToString is: " + valToString);
 				//if I parseFloat the string value, it will not provide 0. in the input field. So want to keep it as a string for now.
 				//this.currentEntry = parseFloat(valToString);
 				this.currentEntry = valToString;
+				//this.updateCurrentOperation(this.currentEntry);
 			}	
 		}
-		else if(val == "-"){
-			//check that previousEntry is not empty
-			//check that previousEntry is not another operator
-		}
-		else if(val == "*"){
-			//do something
-		}	
-		else if (val == "/"){
-			//do something
-		}
+			
 		else if(val == "="){
 			//do something
 		}
@@ -104,14 +117,13 @@ var calculator = {
 			//do something
 		}
 		else if (val == "allClear"){
-			this.currentEntry = "0";
-			this.previousEntry.splice(0,this.previousEntry.length);
+			this.allClear();
 		}
+		//check wen 
 		else if (val == "clearEntry"){
 			this.clearEntry();
 		}
-
-
+		//Figure out a better way to update the currentOperation
 		this.currentOperation = "";
 		this.previousEntry.forEach(function(entry){
 			console.log(entry);
@@ -121,17 +133,24 @@ var calculator = {
 		},this);
 		this.currentOperation += this.currentEntry;
 		console.log("CurrentOperation is: " + this.currentOperation);
+	},
+
+	updateCurrentOperation: function(currEntry){
+		//Figure out a better way to update the currentOperation
+		//this.currentOperation += " ";
+		this.currentOperation += currEntry;
 	}
 	
-
 }
 
-
 var controller = {
+	//should i separate and create an updateOperator. updateNumber, getTotal, clearEntry.
+	//and allClear methods that correspond to new calculator methods.
 	updateEntry: function(val){
 		calculator.updateCurrEntry(val);
 		view.displayEntry(calculator.currentEntry);
-		view.displayOperation(calculator.previousEntry + calculator.currentEntry);
+		//view.displayOperation(calculator.previousEntry + calculator.currentEntry);
+		view.displayOperation(calculator.currentOperation);
 	}
 };
 
@@ -148,6 +167,10 @@ var view = {
 		 var btn_8 = document.getElementById("btn_8");
 		 var btn_9 = document.getElementById("btn_9");
 		 var btn_dec = document.getElementById("btn_dec");
+		 var btn_add = document.getElementById("btn_add");
+		 var btn_subtract = document.getElementById("btn_subtract");
+		 var btn_multiply = document.getElementById("btn_multiply");
+		 var btn_divide = document.getElementById("btn_divide");
 		 var btn_allClear = document.getElementById("btn_allClear");
 		 var btn_clearEntry = document.getElementById("btn_clearEntry");
 
@@ -186,6 +209,15 @@ var view = {
 		 });
 		 btn_add.addEventListener("click", function(){
 		 	controller.updateEntry("+");
+		 });
+		 btn_subtract.addEventListener("click", function(){
+		 	controller.updateEntry("-");
+		 });
+		 btn_multiply.addEventListener("click", function(){
+		 	controller.updateEntry("*");
+		 });
+		  btn_divide.addEventListener("click", function(){
+		 	controller.updateEntry("/");
 		 });
 		 btn_allClear.addEventListener("click", function(){
 		 	controller.updateEntry("allClear");
