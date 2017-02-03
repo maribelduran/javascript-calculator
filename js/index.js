@@ -2,7 +2,10 @@
 
 //things to fix for input values:
 //3. should convert into 3.0 when adding to the currentOperation string.
-//
+//4. be able to switch operators. Currently when one operator is selected, i cannot change the operator value.
+//5. Clear button has a few bugs. 
+	//5a. Cannot add an operator after removing the current Entry through the Clear (C) button
+	//5a. Should not allow to enter another number if the previous entry is a number. 
 //
 var calculator = {
 	total: 0,
@@ -33,21 +36,19 @@ var calculator = {
 		this.currentOperation = "0"
 	},
 	clearEntry: function(){
-		if (this.currentEntry !== "0"){
+		
+		if(this.currentEntry == "0" && this.previousEntry.length == 0){
+			this.currentEntry = "0";
+			this.currentOperation = "0";
+		}else if (this.currentEntry !== "0"){
 			this.currentEntry = "0";
 			var entryArr = this.currentOperation.split(" ");
 			entryArr.splice(entryArr.length-1);
 			console.log("new operation is:" + entryArr);
 			this.currentOperation = entryArr.join(" ");
 		}
-		if(this.currentEntry == "0" && this.previousEntry.length == 0){
-			this.currentEntry = "0";
-			this.currentOperation = "0";
-		}
 		//var newOperation = this.currentOperation.slice(0,this.currentOperation.length-2);
 		//console.log("new operation is:" + newOperation);
-		
-
 		//return this.currentEntry;
 	},
 	updateCurrEntry: function(val){
