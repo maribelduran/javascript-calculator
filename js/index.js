@@ -1,9 +1,14 @@
 //view
+
+//things to fix for input values:
+//3. should convert into 3.0 when adding to the currentOperation string.
+//
+//
 var calculator = {
 	total: 0,
 	previousEntry: [],
 	currentEntry: "0",
-	currentOperation: "",
+	currentOperation: "0",
 	add: function(num1, num2){
 		var sum = num1 + num2;
 		return sum;
@@ -24,21 +29,35 @@ var calculator = {
 	},
 	allClear: function(){
 		this.currentEntry = "0";
-		//this.currentOperation = "0";
-		this.previousEntry.splice(0,this.previousEntry.length);
+		this.previousEntry.splice(0, this.previousEntry.length);
+		this.currentOperation = "0"
 	},
 	clearEntry: function(){
-		this.currentEntry = "0";
+		if (this.currentEntry !== "0"){
+			this.currentEntry = "0";
+			var entryArr = this.currentOperation.split(" ");
+			entryArr.splice(entryArr.length-1);
+			console.log("new operation is:" + entryArr);
+			this.currentOperation = entryArr.join(" ");
+		}
+		if(this.currentEntry == "0" && this.previousEntry.length == 0){
+			this.currentEntry = "0";
+			this.currentOperation = "0";
+		}
+		//var newOperation = this.currentOperation.slice(0,this.currentOperation.length-2);
+		//console.log("new operation is:" + newOperation);
+		
+
 		//return this.currentEntry;
 	},
 	updateCurrEntry: function(val){
 
 		if (val == "+"){
-			//console.log("currentEntry is: " + this.currentEntry);
+			console.log("currentEntry is: " + this.currentEntry);
 			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="-" && this.currentEntry!="*" && this.currentEntry!="/"))  {
-				
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val;
+				this.updateCurrentOperation();
 			}
 			
 		}
@@ -46,7 +65,7 @@ var calculator = {
 			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="*" && this.currentEntry!="/"))  {
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val;
-				//this.updateCurrentOperation(this.currentEntry);
+				this.updateCurrentOperation();
 			}
 			
 		}
@@ -54,59 +73,65 @@ var calculator = {
 			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="-" && this.currentEntry!="/"))  {
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val;
-				//this.updateCurrentOperation(this.currentEntry);
+				this.updateCurrentOperation();
 			}
 
 		}else if (val == "/"){
 			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="-" && this.currentEntry!="*"))  {
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val;
-				//this.updateCurrentOperation(this.currentEntry);
+				this.updateCurrentOperation();
 			}
 
 		}else if (typeof val == 'number' && val !==0){
 			if (this.currentEntry == "0"){
 				this.currentEntry = "";
 			}
-			if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*"){
+			if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*" || this.currentEntry == "/"){
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val.toString();
-
+				this.updateCurrentOperation();
 			}else{
 				var valToString = this.currentEntry.toString() + val.toString();
 				this.currentEntry = valToString;
+				this.updateCurrentOperation();
 			}
 
 		}
 		else if(val == 0){
 			if (this.currentEntry != "0"){
-				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*"){
+				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*" || this.currentEntry == "/"){
 					this.previousEntry.push(this.currentEntry);
 					this.currentEntry = "";
-					//this.updateCurrentOperation(this.currentEntry);
+					//this.updateCurrentOperation();
 				}
-
 				var valToString = this.currentEntry.toString() + val.toString();
+				//console.log("valToString is: " + valToString);
+				//this.currentEntry = parseInt(valToString);
 				this.currentEntry = valToString;
+				this.updateCurrentOperation();
 			}
+			
 			//check that previousEntry is not empty or that we
 		}
-	
+		//0. should not be a valid input
 		else if(val == '.'){
 			//check that decimal character is not in the currentEntry input value
 			//there can only be one decimal in the currenEntry
 			var contains_decimal = /\./.test(this.currentEntry);
 
 			if (!contains_decimal){
-				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*"){
+				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*" || this.currentEntry == "/"){
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = "0";
+				this.updateCurrentOperation();
 			}
 				var valToString = this.currentEntry.toString() + val.toString();
+				console.log("valToString is: " + valToString);
 				//if I parseFloat the string value, it will not provide 0. in the input field. So want to keep it as a string for now.
 				//this.currentEntry = parseFloat(valToString);
 				this.currentEntry = valToString;
-				//this.updateCurrentOperation(this.currentEntry);
+				this.updateCurrentOperation();
 			}	
 		}
 			
@@ -123,7 +148,9 @@ var calculator = {
 		else if (val == "clearEntry"){
 			this.clearEntry();
 		}
-		//Figure out a better way to update the currentOperation
+	},
+	//Figure out a better way to update the currentOperation
+	updateCurrentOperation: function(){
 		this.currentOperation = "";
 		this.previousEntry.forEach(function(entry){
 			console.log(entry);
@@ -133,14 +160,7 @@ var calculator = {
 		},this);
 		this.currentOperation += this.currentEntry;
 		console.log("CurrentOperation is: " + this.currentOperation);
-	},
-
-	updateCurrentOperation: function(currEntry){
-		//Figure out a better way to update the currentOperation
-		//this.currentOperation += " ";
-		this.currentOperation += currEntry;
 	}
-	
 }
 
 var controller = {
