@@ -1,16 +1,18 @@
-//Currently fixing:
+//Fixed
+//2/3/2017
 //Fixed not being able to switch operators. Before when one operator was entered, I couldn't change to a different operator.
 
-//things to fix for input values:
-//3.(float) should convert into 3 (an int) when adding it to the currentOperation string.
-//4. be able to switch operators. Currently when one operator is selected, i cannot change the operator value.
+//2/4/2017
+//calculator now accepts "0." as a valid entry. This fixed the issue where the calc could not switch operators after inserting "0.".
+//a number value ending with "." will convert to an integer when added to the current operation string. For example, "3.0" will transform into "3";
+
+
+//Things to fix when validating inputs
 //5. Clear button has a few bugs. 
 	//5a. Cannot add an operator after removing the current Entry through the Clear (C) button
-	//5b. Should not allow to enter another number if the previous entry is a number. 
-	//5c. 0. should remove the decimal only, not the whole value
-//6: Currently unable to switch operators after inserting 0. value
-//view
+	//5b. Should not allow to enter another number if the previous entry is a number after clearing an operator using Clear. 
 
+//view
 var calculator = {
 	total: 0,
 	previousEntry: [],
@@ -31,34 +33,43 @@ var calculator = {
 	divide: function(num1, num2){
 		var divided = num1/num2;
 		return divided;
-
 	},
 	allClear: function(){
 		this.currentEntry = "0";
 		this.currentOperation = "0"
+
 		this.previousEntry.splice(0, this.previousEntry.length);
 	},
 	clearEntry: function(){
-		
 		if(this.previousEntry.length == 0){
-			this.currentEntry = "0";
-			this.currentOperation = "0";
+			this.currentEntry = this.currentOperation = "0";
+
 		}else if (this.currentEntry !== "0"){
 			this.currentEntry = "0";
 			var entryArr = this.currentOperation.split(" ");
 			entryArr.splice(entryArr.length-1);
-			console.log("new operation is:" + entryArr);
 			this.currentOperation = entryArr.join(" ");
 		}
 	},
 	updateCurrEntry: function(val){
-
 		var operators = /\*|\/|-|\+/;
 
-		if (operators.test(val) ){
-			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (operators.test(this.currentEntry) == false))  {
+		function isOperator(value){
+			var operators = /\*|\/|-|\+/;
+			return operators.test(value);	
+		}
+
+		if (isOperator(val)){
+			if (isOperator(this.currentEntry) == false) {
 				//check if currentEntry has a .
-				this.previousEntry.push(this.currentEntry);
+				//if the currentEntry contains a decimal at the end of the string, then we want to remove (trim) the decimal value 
+				//try using a regex expression to check whether the currentEntry string has a decimal at the end.
+				///.(0)/.test(this.currentEntry);
+				if (this.currentEntry[this.currentEntry.length-1] == "."){
+					this.currentEntry = this.currentEntry.replace(/\./, "");
+				}
+
+				this.previousEntry.push(this.currentEntry);	
 				this.currentEntry = val;
 				this.updateCurrentOperation();
 			}
@@ -71,7 +82,8 @@ var calculator = {
 			if (this.currentEntry == "0"){
 				this.currentEntry = "";
 			}
-			if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*" || this.currentEntry == "/"){
+			
+			if (isOperator(this.currentEntry)){
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val.toString();
 				this.updateCurrentOperation();
@@ -84,7 +96,7 @@ var calculator = {
 		}
 		else if(val == 0){
 			if (this.currentEntry != "0"){
-				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*" || this.currentEntry == "/"){
+				if (isOperator(this.currentEntry)){
 					this.previousEntry.push(this.currentEntry);
 					this.currentEntry = "";
 					//this.updateCurrentOperation();
@@ -96,22 +108,19 @@ var calculator = {
 				this.updateCurrentOperation();
 			}
 		}
-		//0. should not be a valid input
+		//0. should be a valid input
 		else if(val == '.'){
 			//check that decimal character is not in the currentEntry input value
 			//there can only be one decimal in the currenEntry
 			var contains_decimal = /\./.test(this.currentEntry);
 
 			if (!contains_decimal){
-				if (this.currentEntry == "+" || this.currentEntry == "-" || this.currentEntry == "*" || this.currentEntry == "/"){
+				if (isOperator(this.currentEntry)){
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = "0";
 				this.updateCurrentOperation();
 			}
 				var valToString = this.currentEntry.toString() + val.toString();
-				console.log("valToString is: " + valToString);
-				//if I parseFloat the string value, it will not provide 0. in the input field. So want to keep it as a string for now.
-				//this.currentEntry = parseFloat(valToString);
 				this.currentEntry = valToString;
 				this.updateCurrentOperation();
 			}	
@@ -135,13 +144,11 @@ var calculator = {
 	updateCurrentOperation: function(){
 		this.currentOperation = "";
 		this.previousEntry.forEach(function(entry){
-			console.log(entry);
 			this.currentOperation += entry;
 			this.currentOperation += " ";
 
 		},this);
 		this.currentOperation += this.currentEntry;
-		console.log("CurrentOperation is: " + this.currentOperation);
 	}
 }
 
@@ -250,7 +257,3 @@ console.log(calculator.subtract(0,2.5));
 console.log(calculator.allClear());
 console.log(calculator.cancelEntry());
 */
-
-
-
-
