@@ -1,12 +1,16 @@
-//view
+//Currently fixing:
+//Fixed not being able to switch operators. Before when one operator was entered, I couldn't change to a different operator.
 
 //things to fix for input values:
-//3. should convert into 3.0 when adding to the currentOperation string.
+//3.(float) should convert into 3 (an int) when adding it to the currentOperation string.
 //4. be able to switch operators. Currently when one operator is selected, i cannot change the operator value.
 //5. Clear button has a few bugs. 
 	//5a. Cannot add an operator after removing the current Entry through the Clear (C) button
-	//5a. Should not allow to enter another number if the previous entry is a number. 
-//
+	//5b. Should not allow to enter another number if the previous entry is a number. 
+	//5c. 0. should remove the decimal only, not the whole value
+//6: Currently unable to switch operators after inserting 0. value
+//view
+
 var calculator = {
 	total: 0,
 	previousEntry: [],
@@ -17,7 +21,6 @@ var calculator = {
 		return sum;
 	},
 	subtract: function(num1, num2){
-		//watch out for 
 		var diff = num1 - num2;
 		return diff;
 	},
@@ -32,12 +35,12 @@ var calculator = {
 	},
 	allClear: function(){
 		this.currentEntry = "0";
-		this.previousEntry.splice(0, this.previousEntry.length);
 		this.currentOperation = "0"
+		this.previousEntry.splice(0, this.previousEntry.length);
 	},
 	clearEntry: function(){
 		
-		if(this.currentEntry == "0" && this.previousEntry.length == 0){
+		if(this.previousEntry.length == 0){
 			this.currentEntry = "0";
 			this.currentOperation = "0";
 		}else if (this.currentEntry !== "0"){
@@ -47,43 +50,23 @@ var calculator = {
 			console.log("new operation is:" + entryArr);
 			this.currentOperation = entryArr.join(" ");
 		}
-		//var newOperation = this.currentOperation.slice(0,this.currentOperation.length-2);
-		//console.log("new operation is:" + newOperation);
-		//return this.currentEntry;
 	},
 	updateCurrEntry: function(val){
 
-		if (val == "+"){
-			console.log("currentEntry is: " + this.currentEntry);
-			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="-" && this.currentEntry!="*" && this.currentEntry!="/"))  {
-				this.previousEntry.push(this.currentEntry);
-				this.currentEntry = val;
-				this.updateCurrentOperation();
-			}
-			
-		}
-		if (val == "-"){
-			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="*" && this.currentEntry!="/"))  {
-				this.previousEntry.push(this.currentEntry);
-				this.currentEntry = val;
-				this.updateCurrentOperation();
-			}
-			
-		}
-		else if(val == "*"){
-			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="-" && this.currentEntry!="/"))  {
-				this.previousEntry.push(this.currentEntry);
-				this.currentEntry = val;
-				this.updateCurrentOperation();
-			}
+		var operators = /\*|\/|-|\+/;
 
-		}else if (val == "/"){
-			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (this.currentEntry!=val && this.currentEntry!="+" && this.currentEntry!="-" && this.currentEntry!="*"))  {
+		if (operators.test(val) ){
+			if ((this.currentEntry!= "0" && this.currentEntry!= "0.") && (operators.test(this.currentEntry) == false))  {
+				//check if currentEntry has a .
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val;
 				this.updateCurrentOperation();
 			}
-
+			else if(operators.test(this.currentEntry)){
+				this.currentEntry = val;
+				this.updateCurrentOperation();
+			}	
+			
 		}else if (typeof val == 'number' && val !==0){
 			if (this.currentEntry == "0"){
 				this.currentEntry = "";
@@ -112,8 +95,6 @@ var calculator = {
 				this.currentEntry = valToString;
 				this.updateCurrentOperation();
 			}
-			
-			//check that previousEntry is not empty or that we
 		}
 		//0. should not be a valid input
 		else if(val == '.'){
