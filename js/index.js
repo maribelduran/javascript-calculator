@@ -6,11 +6,13 @@
 //calculator now accepts "0." as a valid entry. This fixed the issue where the calc could not switch operators after inserting "0.".
 //a number value ending with "." will convert to an integer when added to the current operation string. For example, "3.0" will transform into "3";
 
+//2/5/2016
+//Calculator does not allow digit or decimal inputs after an operator value was just cleared using Clear (clear button).
 
 //Things to fix when validating inputs
-//5. Clear button has a few bugs. 
-	//5a. Cannot add an operator after removing the current Entry through the Clear (C) button
-	//5b. Should not allow to enter another number if the previous entry is a number after clearing an operator using Clear. 
+//5a. Cannot add an operator after removing the current Entry through the Clear (C) button
+
+//Should not allow to enter another number if the previous entry is a number after clearing an operator using Clear. 
 
 //view
 var calculator = {
@@ -53,6 +55,8 @@ var calculator = {
 	},
 	updateCurrEntry: function(val){
 		var operators = /\*|\/|-|\+/;
+		var mostRecentEntry = this.previousEntry[this.previousEntry.length-1];
+		console.log("CurrentEntry is: " + this.currentEntry);
 
 		function isOperator(value){
 			var operators = /\*|\/|-|\+/;
@@ -87,7 +91,9 @@ var calculator = {
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val.toString();
 				this.updateCurrentOperation();
-			}else{
+			}else if ((/\d/.test(mostRecentEntry) == true) && this.previousEntry.length > 0){
+				this.currentEntry = "0";
+			}else{ //concatenating numbers
 				var valToString = this.currentEntry.toString() + val.toString();
 				this.currentEntry = valToString;
 				this.updateCurrentOperation();
@@ -108,8 +114,7 @@ var calculator = {
 				this.updateCurrentOperation();
 			}
 		}
-		//0. should be a valid input
-		else if(val == '.'){
+		else if(val == '.' && (/\d/.test(mostRecentEntry) == false)){
 			//check that decimal character is not in the currentEntry input value
 			//there can only be one decimal in the currenEntry
 			var contains_decimal = /\./.test(this.currentEntry);
@@ -239,7 +244,6 @@ var view = {
 	displayEntry: function(val){
 		var entry = document.getElementById("entryField");
 		entry.innerHTML = val;
-		console.log(val);
 	},
 	displayOperation: function(val){
 		var operation = document.getElementById("operation");
