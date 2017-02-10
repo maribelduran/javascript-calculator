@@ -6,13 +6,27 @@
 //calculator now accepts "0." as a valid entry. This fixed the issue where the calc could not switch operators after inserting "0.".
 //a number value ending with "." will convert to an integer when added to the current operation string. For example, "3.0" will transform into "3";
 
-//2/5/2016
+//2/5/2016 (Day 34)
 //Calculator does not allow digit or decimal inputs after an operator value was just cleared using Clear (clear button).
 
-//Things to fix when validating inputs
-//5a. Cannot add an operator after removing the current Entry through the Clear (C) button
+//2/6/2016: (Day 35:Coded for 40 min, Need to finish 20 and update)
+//Calculator now accepts an operator entry afer an operator was just cleared. 
 
-//Should not allow to enter another number if the previous entry is a number after clearing an operator using Clear. 
+//2/7/2017 (day 36):
+//Didn't code
+//DIdn't get to code. Woke up at 4 am to try to catch the Haleakala Sunrise in Hawaii and didn't stop the whole day.
+
+//2/8/2017 (day 37):
+//Accepts "." convert sto "0.".
+//Currently fixing bug: //Should not allow opeator input after an number was cleared using Clear (clear button).
+//Continued working on Calculator JS App. Nothing too exiciting.  
+
+//02/09/2017 (Day 38):
+//Calculator does not allow operator inputs after an number entry was just cleared.
+
+//Things to fix when validating inputs
+//Currently not being able to add "0" after a number entry has just been cleared.
+//Does not allow to clear a "0" entry.
 
 //view
 var calculator = {
@@ -20,6 +34,8 @@ var calculator = {
 	previousEntry: [],
 	currentEntry: "0",
 	currentOperation: "0",
+	justClearedOperator: false,
+	justClearedNumber: false,
 	add: function(num1, num2){
 		var sum = num1 + num2;
 		return sum;
@@ -44,18 +60,36 @@ var calculator = {
 	},
 	clearEntry: function(){
 		if(this.previousEntry.length == 0){
+			if ( /\*|\/|-|\+/.test(this.currentEntry)){
+				this.justClearedOprator = true;
+			}
+			else{
+				this.justClearedNumber = true;
+				console.log("just cleared a number entry")
+			}
 			this.currentEntry = this.currentOperation = "0";
 
 		}else if (this.currentEntry !== "0"){
+			if ( /\*|\/|-|\+/.test(this.currentEntry)){
+				this.justClearedOperator = true;
+			}
+
+			else{
+				this.justClearedNumber = true;
+				console.log("just cleared a number entry")
+			}
 			this.currentEntry = "0";
 			var entryArr = this.currentOperation.split(" ");
 			entryArr.splice(entryArr.length-1);
 			this.currentOperation = entryArr.join(" ");
+			console.log(this.currentOperation);
+			console.log(this.previousEntry);
 		}
 	},
 	updateCurrEntry: function(val){
 		var operators = /\*|\/|-|\+/;
 		var mostRecentEntry = this.previousEntry[this.previousEntry.length-1];
+		console.log("MostRecentEntry: " + mostRecentEntry);
 		console.log("CurrentEntry is: " + this.currentEntry);
 
 		function isOperator(value){
@@ -64,7 +98,7 @@ var calculator = {
 		}
 
 		if (isOperator(val)){
-			if (isOperator(this.currentEntry) == false) {
+			if (isOperator(this.currentEntry) == false && this.justClearedNumber!= true) {
 				//check if currentEntry has a .
 				//if the currentEntry contains a decimal at the end of the string, then we want to remove (trim) the decimal value 
 				//try using a regex expression to check whether the currentEntry string has a decimal at the end.
@@ -72,12 +106,17 @@ var calculator = {
 				if (this.currentEntry[this.currentEntry.length-1] == "."){
 					this.currentEntry = this.currentEntry.replace(/\./, "");
 				}
-
-				this.previousEntry.push(this.currentEntry);	
+				//if we haven't just cleared the current Entry
+				if (this.justClearedOperator == true){
+					this.justClearedOperator = false;
+				}
+				else{
+					this.previousEntry.push(this.currentEntry);	
+				}
 				this.currentEntry = val;
 				this.updateCurrentOperation();
 			}
-			else if(operators.test(this.currentEntry)){
+			else if(isOperator(this.currentEntry)){
 				this.currentEntry = val;
 				this.updateCurrentOperation();
 			}	
@@ -85,6 +124,10 @@ var calculator = {
 		}else if (typeof val == 'number' && val !==0){
 			if (this.currentEntry == "0"){
 				this.currentEntry = "";
+			}
+
+			if (this.justClearedNumber == true){
+					this.justClearedNumber = false;
 			}
 			
 			if (isOperator(this.currentEntry)){
@@ -98,28 +141,29 @@ var calculator = {
 				this.currentEntry = valToString;
 				this.updateCurrentOperation();
 			}
-
 		}
 		else if(val == 0){
+			if (this.justClearedNumber == true){
+					this.justClearedNumber = false;
+			}
+
+
 			if (this.currentEntry != "0"){
 				if (isOperator(this.currentEntry)){
 					this.previousEntry.push(this.currentEntry);
 					this.currentEntry = "";
-					//this.updateCurrentOperation();
 				}
 				var valToString = this.currentEntry.toString() + val.toString();
-				//console.log("valToString is: " + valToString);
-				//this.currentEntry = parseInt(valToString);
 				this.currentEntry = valToString;
 				this.updateCurrentOperation();
 			}
 		}
-		else if(val == '.' && (/\d/.test(mostRecentEntry) == false)){
+		else if(val == '.'){
 			//check that decimal character is not in the currentEntry input value
 			//there can only be one decimal in the currenEntry
 			var contains_decimal = /\./.test(this.currentEntry);
 
-			if (!contains_decimal){
+			if (!contains_decimal && this.justClearedOperator!= true){
 				if (isOperator(this.currentEntry)){
 				this.previousEntry.push(this.currentEntry);
 				this.currentEntry = "0";
