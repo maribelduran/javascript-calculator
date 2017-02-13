@@ -2,31 +2,16 @@
 //2/3/2017
 //Fixed not being able to switch operators. Before when one operator was entered, I couldn't change to a different operator.
 
-//2/4/2017
-//calculator now accepts "0." as a valid entry. This fixed the issue where the calc could not switch operators after inserting "0.".
-//a number value ending with "." will convert to an integer when added to the current operation string. For example, "3.0" will transform into "3";
+//2/10/2017 (Day 39)
+//Can clear a "0" entry.
+//Can add "0" after a number entry has just been cleared.
+//Input validation is complete and can now chain math operations. Will finally be able to work on 
+// "=" entries.
 
-//2/5/2016 (Day 34)
-//Calculator does not allow digit or decimal inputs after an operator value was just cleared using Clear (clear button).
+//2/11/2017 (Day 40): Spent all day traveling. Will make up for this hour soon!
+//2/12/2017: (Day 41):
+//2/13/2017: (Day 42): 
 
-//2/6/2016: (Day 35:Coded for 40 min, Need to finish 20 and update)
-//Calculator now accepts an operator entry afer an operator was just cleared. 
-
-//2/7/2017 (day 36):
-//Didn't code
-//DIdn't get to code. Woke up at 4 am to try to catch the Haleakala Sunrise in Hawaii and didn't stop the whole day.
-
-//2/8/2017 (day 37):
-//Accepts "." convert sto "0.".
-//Currently fixing bug: //Should not allow opeator input after an number was cleared using Clear (clear button).
-//Continued working on Calculator JS App. Nothing too exiciting.  
-
-//02/09/2017 (Day 38):
-//Calculator does not allow operator inputs after an number entry was just cleared.
-
-//Things to fix when validating inputs
-//Currently not being able to add "0" after a number entry has just been cleared.
-//Does not allow to clear a "0" entry.
 
 //view
 var calculator = {
@@ -69,7 +54,7 @@ var calculator = {
 			}
 			this.currentEntry = this.currentOperation = "0";
 
-		}else if (this.currentEntry !== "0"){
+		}else if (!this.justClearedNumber && !this.justClearedOperator){
 			if ( /\*|\/|-|\+/.test(this.currentEntry)){
 				this.justClearedOperator = true;
 			}
@@ -121,7 +106,7 @@ var calculator = {
 				this.updateCurrentOperation();
 			}	
 			
-		}else if (typeof val == 'number' && val !==0){
+		}else if (typeof val == 'number'){
 			if (this.currentEntry == "0"){
 				this.currentEntry = "";
 			}
@@ -141,24 +126,7 @@ var calculator = {
 				this.currentEntry = valToString;
 				this.updateCurrentOperation();
 			}
-		}
-		else if(val == 0){
-			if (this.justClearedNumber == true){
-					this.justClearedNumber = false;
-			}
-
-
-			if (this.currentEntry != "0"){
-				if (isOperator(this.currentEntry)){
-					this.previousEntry.push(this.currentEntry);
-					this.currentEntry = "";
-				}
-				var valToString = this.currentEntry.toString() + val.toString();
-				this.currentEntry = valToString;
-				this.updateCurrentOperation();
-			}
-		}
-		else if(val == '.'){
+		}else if(val == '.'){
 			//check that decimal character is not in the currentEntry input value
 			//there can only be one decimal in the currenEntry
 			var contains_decimal = /\./.test(this.currentEntry);
@@ -178,13 +146,14 @@ var calculator = {
 		else if(val == "="){
 			//do something
 		}
-		else if (val =="+/-"){
+		else if (val =="negate"){
+			//this.currentEntry = "-" + this.currentEntry;
+			//this.updateCurrentOperation();
 			//do something
 		}
 		else if (val == "allClear"){
 			this.allClear();
 		}
-		//check wen 
 		else if (val == "clearEntry"){
 			this.clearEntry();
 		}
@@ -283,7 +252,6 @@ var view = {
 		 btn_clearEntry.addEventListener("click", function(){
 		 	controller.updateEntry("clearEntry");
 		 });
-
 	},
 	displayEntry: function(val){
 		var entry = document.getElementById("entryField");
