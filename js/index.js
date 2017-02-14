@@ -1,18 +1,3 @@
-//Fixed
-//2/3/2017
-//Fixed not being able to switch operators. Before when one operator was entered, I couldn't change to a different operator.
-
-//2/10/2017 (Day 39)
-//Can clear a "0" entry.
-//Can add "0" after a number entry has just been cleared.
-//Input validation is complete and can now chain math operations. Will finally be able to work on 
-// "=" entries.
-
-//2/11/2017 (Day 40): Spent all day traveling. Will make up for this hour soon!
-//2/12/2017: (Day 41):
-//2/13/2017: (Day 42): 
-
-
 //view
 var calculator = {
 	total: 0,
@@ -21,22 +6,7 @@ var calculator = {
 	currentOperation: "0",
 	justClearedOperator: false,
 	justClearedNumber: false,
-	add: function(num1, num2){
-		var sum = num1 + num2;
-		return sum;
-	},
-	subtract: function(num1, num2){
-		var diff = num1 - num2;
-		return diff;
-	},
-	multiply: function(num1, num2){
-		var multiplied = num1 * num2;
-		return multiplied;
-	},
-	divide: function(num1, num2){
-		var divided = num1/num2;
-		return divided;
-	},
+
 	allClear: function(){
 		this.currentEntry = "0";
 		this.currentOperation = "0"
@@ -47,20 +17,27 @@ var calculator = {
 		if(this.previousEntry.length == 0){
 			if ( /\*|\/|-|\+/.test(this.currentEntry)){
 				this.justClearedOprator = true;
+				this.justClearedNumber = false;
 			}
 			else{
 				this.justClearedNumber = true;
+				this.justClearedOprator = false;
 				console.log("just cleared a number entry")
 			}
 			this.currentEntry = this.currentOperation = "0";
 
-		}else if (!this.justClearedNumber && !this.justClearedOperator){
+		}else{
+			var mostRecentE = this.currentOperation[this.previousEntry.length-1];
+			console.log("Entry being removed ", mostRecentE);
 			if ( /\*|\/|-|\+/.test(this.currentEntry)){
-				this.justClearedOperator = true;
+				this.justClearedOprator = true;
+				this.justClearedNumber = false;
+					console.log("just cleared an operator entry")
 			}
 
 			else{
 				this.justClearedNumber = true;
+				this.justClearedOprator = false;
 				console.log("just cleared a number entry")
 			}
 			this.currentEntry = "0";
@@ -84,10 +61,6 @@ var calculator = {
 
 		if (isOperator(val)){
 			if (isOperator(this.currentEntry) == false && this.justClearedNumber!= true) {
-				//check if currentEntry has a .
-				//if the currentEntry contains a decimal at the end of the string, then we want to remove (trim) the decimal value 
-				//try using a regex expression to check whether the currentEntry string has a decimal at the end.
-				///.(0)/.test(this.currentEntry);
 				if (this.currentEntry[this.currentEntry.length-1] == "."){
 					this.currentEntry = this.currentEntry.replace(/\./, "");
 				}
@@ -141,15 +114,18 @@ var calculator = {
 				this.currentEntry = valToString;
 				this.updateCurrentOperation();
 			}	
-		}
-			
-		else if(val == "="){
-			//do something
-		}
-		else if (val =="negate"){
-			//this.currentEntry = "-" + this.currentEntry;
-			//this.updateCurrentOperation();
-			//do something
+		}else if(val == "="){
+			if (this.previousEntry.length == 0){
+				this.total = this.currentEntry;
+
+			//if end of expression does not end with an operator.
+			}else if ((this.currentOperation.split(" ").length % 2) != 0){
+				//this.currentEntry = this.getTotal(this.currentOperation.split(" "));
+				this.currentEntry = math.eval(this.currentOperation);
+			}else{
+				this.currentEntry = "Error Unexpected end of expression";
+			}
+
 		}
 		else if (val == "allClear"){
 			this.allClear();
@@ -164,9 +140,12 @@ var calculator = {
 		this.previousEntry.forEach(function(entry){
 			this.currentOperation += entry;
 			this.currentOperation += " ";
-
 		},this);
 		this.currentOperation += this.currentEntry;
+	},
+	getTotal: function(values){
+		//call operation based on the operation string and return total.
+		return this.add(parseFloat(values[0]), parseFloat(values[2]));
 	}
 }
 
@@ -200,6 +179,7 @@ var view = {
 		 var btn_divide = document.getElementById("btn_divide");
 		 var btn_allClear = document.getElementById("btn_allClear");
 		 var btn_clearEntry = document.getElementById("btn_clearEntry");
+		 var btn_equals = document.getElementById("btn_equals");
 
 		 btn_0.addEventListener("click", function(){
 		 	controller.updateEntry(0);
@@ -252,6 +232,9 @@ var view = {
 		 btn_clearEntry.addEventListener("click", function(){
 		 	controller.updateEntry("clearEntry");
 		 });
+		 btn_equals.addEventListener("click", function(){
+		 	controller.updateEntry("=");
+		 });
 	},
 	displayEntry: function(val){
 		var entry = document.getElementById("entryField");
@@ -264,12 +247,3 @@ var view = {
 };
 
 view.addEventListeners();
-
-/*
-console.log(calculator.add(1.677777,2.677777));
-console.log(calculator.multiply(3.2,2.5));
-console.log(calculator.divide(0,2.5));
-console.log(calculator.subtract(0,2.5));
-console.log(calculator.allClear());
-console.log(calculator.cancelEntry());
-*/
