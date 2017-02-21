@@ -1,186 +1,139 @@
-//Still have 2 hours to catch up from last week.
-//7:15PM
-//Day 43& 44: Calculator is about 80% functional! Need to fix minor errors.
-
-
-//7:15PM - 
-//Day 45:
-//Able to recover after Error button.
-//
-//To fix:
-//How to recover after an "Error" output
-
-
-
+//Day 46: Friday 2/16
+//Continued working on JS Calculator view layer.
 
 //view
 var calculator = {
 	total: '',
-	previousEntry: [],
 	currentEntry: "0",
-	currentOperation: "0",
+	currentOperation: "",
 	justClearedOperator: false,
 	justClearedNumber: false,
 
 	allClear: function(){
 		this.currentEntry = "0";
-		this.currentOperation = "0"
+		this.currentOperation = "";
 		this.total = '';
-
-		this.previousEntry.splice(0, this.previousEntry.length);
+		this.justClearedOperator = this.justClearedNumber = false;
 	},
 	clearEntry: function(){
-		if(this.previousEntry.length == 0){
-			if ( /\*|\/|-|\+/.test(this.currentEntry)){
-				this.justClearedOprator = true;
-				this.justClearedNumber = false;
-			}
-			else{
-				this.justClearedNumber = true;
-				this.justClearedOprator = false;
-				console.log("just cleared a number entry")
-			}
-			this.currentEntry = this.currentOperation = "0";
-
+		if(this.currentOperation.length == 1){
+			this.allClear();
 		}else{
-			var mostRecentE = this.currentOperation[this.currentOperation.length-1];
-			console.log("Entry being removed ", mostRecentE);
-			if ( /\*|\/|-|\+/.test(this.currentEntry)){
-				this.justClearedOprator = true;
-				this.justClearedNumber = false;
-					console.log("just cleared an operator entry")
-			}
-
-			else{
-				this.justClearedNumber = true;
-				this.justClearedOprator = false;
-				console.log("just cleared a number entry")
-			}
 			this.currentEntry = "0";
 			var entryArr = this.currentOperation.split(" ");
-			console.log(entryArr);
-			entryArr.splice(entryArr.length-1);
+			var removedEntry = entryArr.splice(entryArr.length-1);
 			this.currentOperation = entryArr.join(" ");
+			if ( /\*|\/|-|\+/.test(removedEntry)){
+				this.justClearedOperator = true;
+				this.justClearedNumber = false;
+			}
+			else{
+				this.justClearedNumber = true;
+				this.justClearedOperator = false;
+			}
 		}
 	},
 	updateCurrEntry: function(val){
-		var operators = /\*|\/|-|\+/;
-		var mostRecentEntry = this.previousEntry[this.previousEntry.length-1];
 		var justCalculated =  /\=|Error/.test(this.currentOperation);
 
 		function isOperator(value){
 			var operators = /\*|\/|-|\+/;
 			return operators.test(value);	
 		}
-
 		if (isOperator(val)){
-
 			if (justCalculated){
 				this.currentEntry = val;
-				//this.currentOperation = this.total + val;
-				this.previousEntry.splice(0, this.previousEntry.length);
-				this.previousEntry.push(this.total);
-				this.updateCurrentOperation();
-				justCalculated = false;
-				console.log(justCalculated);
+				this.currentOperation = this.total + " " + val;
+				justCalculated = false; 
 
 			}else if (isOperator(this.currentEntry) == false && this.justClearedNumber!= true) {
 				if (this.currentEntry[this.currentEntry.length-1] == "."){
 					//remove trailing decimal values 
 					this.currentEntry = this.currentEntry.replace(/\./, "");
+					this.currentOperation = this.currentOperation.replace(/.$/,"");
 				}
-				//if we haven't just cleared the current Entry
-				if (this.justClearedOperator == true){
-					this.justClearedOperator = false;
-				}
-				else{
-					this.previousEntry.push(this.currentEntry);	
-				}
+				//if we have just cleared the current Entry
 				this.currentEntry = val;
-				this.updateCurrentOperation();
-			}
-			else if(isOperator(this.currentEntry)){
+				this.currentOperation = this.currentOperation + " " + val;
+				//this.updateCurrentOperation();
+				this.justClearedOperation = false;
+			}else if(isOperator(this.currentEntry)){
 				//replace operator
 				this.currentEntry = val;
-				this.updateCurrentOperation();
-			}	
-			console.log("end of code block");
-			
-		}else if (typeof val == 'number'){
-			this.justClearedNumber = false;
-			//might be able to use allClear() instead
-			if (this.currentEntry == "0" || (this.total!= "" && justCalculated) || this.currentEntry == "Error"){
-				this.currentEntry = this.total = "";
-				this.currentOperation = "";
-				this.previousEntry.splice(0, this.previousEntry.length)
+				//this.updateCurrentOperation();
+				this.currentOperation = this.currentOperation.replace(/.$/,val);
 			}
 			
+		}else if (typeof val == 'number' && !this.justClearedOperator){
+			//might be able to use allClear() instead
+			if (justCalculated){
+				this.allClear();
+			}
+			//need to fix this
+			//this causes issues when we clear out a number and then want to add a number again
+			//also causes issues where we click on 0 twice. it will clear out everything
+			//we don't want to concatenate "0".
+			if(this.currentEntry == "0"){
+				this.currentEntry = "";
+				if (!this.justClearedNumber){
+					this.currentOperation = this.currentOperation.replace(/.$/,"");
+				//this.currentOperation += "";
+				}
+				else{
+					this.currentOperation += " ";
+				}	
+			}
 			if (isOperator(this.currentEntry)){
-				this.previousEntry.push(this.currentEntry);
+				//this.previousEntry.push(this.currentEntry);
 				this.currentEntry = val.toString();
-				this.updateCurrentOperation();
+				this.currentOperation += " " + this.currentEntry;
+				//this.updateCurrentOperation();
 
-			}else if ((/\d/.test(mostRecentEntry) == true) && this.previousEntry.length > 0){
-				this.currentEntry = "0";
 			}else{ //concatenating numbers
 				var valToString = this.currentEntry.toString() + val.toString();
 				this.currentEntry = valToString;
-				this.updateCurrentOperation();
-				
+				//this.updateCurrentOperation();
+				this.currentOperation = this.currentOperation + val.toString();
 			}
-		}else if(val == '.'){
-			//check that decimal character is not in the currentEntry input value
-			//there can only be one decimal in the currenEntry
+			this.justClearedNumber = false;
 
+		}else if(val == '.'){
 			if (justCalculated){
-				//Want to clear out currentOperation, currentEntry, and previousEntry
+				this.currentEntry = this.currentOperation = "0";
 			}
 
 			var contains_decimal = /\./.test(this.currentEntry);
 			if (!contains_decimal && this.justClearedOperator!= true){
-				if (isOperator(this.currentEntry)){
-				this.previousEntry.push(this.currentEntry);
+				if (isOperator(this.currentEntry) || this.justClearedNumber){
 				this.currentEntry = "0";
-				this.updateCurrentOperation();
-				justCalculated = false;
-			}
+				this.currentOperation += " " + this.currentEntry;
+				
+				}
 				var valToString = this.currentEntry.toString() + val.toString();
 				this.currentEntry = valToString;
-				this.updateCurrentOperation();
+				this.currentOperation = this.currentOperation + val.toString();
 			}	
 		}else if(val == "=" && !justCalculated){
-			if (this.previousEntry.length == 0){
-				//this.currentEntry = math.eval(this.currentOperation);
-				this.total = this.currentEntry;
-				this.currentOperation = this.currentEntry + "=" + this.currentEntry;
-
-			//if end of expression does not end with an operator.
-			}else if (!isOperator(this.currentOperation[this.currentOperation.length-1])){
+			if (!isOperator(this.currentOperation.split(" ").splice(-1))){
 				this.total = math.eval(this.currentOperation);
 				this.currentEntry = this.total;
 				this.currentOperation += " = " + this.total;
 
 			}else{
-				this.currentEntry = "Error";
-				this.currentOperation = "Error";
-				this.total = "0";
+				this.currentEntry = this.currentOperation = "Error";
+				this.total = "";
 			}
-
 		}
 		else if (val == "allClear"){
 			this.allClear();
 		}
 		else if (val == "clearEntry"){
 			if (!justCalculated){
-				console.log("Just clearing entry");
 				this.clearEntry();
-
-
 			}
 			else{
 				this.allClear();
 			}
-			
 		}
 	},
 	//Figure out a better way to update the currentOperation
