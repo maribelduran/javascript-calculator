@@ -1,0 +1,88 @@
+/*https://dribbble.com/colors/66eece?percent=30 */
+/*http://angrytools.com/gradient/*/
+
+body{
+	height: 100%;
+	margin: 0;
+	color: white;
+	font-family: 'Open Sans', sans-serif;
+	/*font-family: 'Roboto', sans-serif;*/
+	background: -moz-linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 49%, #66eece 50%, #66eece 100%); /* ff3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #66eece), color-stop(50%, #66eece), color-stop(51%, #FFFFFF), color-stop(100%, #FFFFFF)); /* safari4+,chrome */
+	background: -webkit-linear-gradient(130deg, #FFFFFF 0%, #FFFFFF 49%, #66eece 50%, #66eece 100%); /* safari5.1+,chrome10+ */
+	background: -o-linear-gradient(130deg, #FFFFFF 0%, #FFFFFF 49%, #66eece 50%, #66eece 100%); /* opera 11.10+ */
+	background: -ms-linear-gradient(130deg, #FFFFFF 0%, #FFFFFF 49%, #66eece 50%, #66eece 100%); /* ie10+ */
+	background: linear-gradient(320deg, #FFFFFF 0%, #FFFFFF 49%, #66eece 50%, #66eece 100%); /* w3c */
+
+}
+.container-fluid{
+	width: 100%;
+	margin:auto;
+	margin-top: 50px;
+}
+
+h1{
+	text-align: center;
+}
+
+.well{
+	margin:auto;
+	width: 340px;
+	padding: 20px;
+	background-color: white;
+	border-radius: 5px;
+	border-style: solid;
+	border-width: thin;
+	border-color: #ccc;
+}
+
+#calculator-content{
+	width: 90%;
+	margin:auto;
+	font-size: 30px;
+}
+
+#entryScreen{
+	background-color: #66eece;
+	text-align: right;
+}
+
+#entryField{
+	font-size: 30px;
+}
+
+#operation{
+	background-color:#30e8bd;
+	padding-bottom: 5px;
+}
+
+.row{
+  display: flex !important;   
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+}
+
+
+button{
+	width: 25%;
+	height: 60px;
+	height: 40px;
+  	font-size: 30px !important;
+  	font-weight: light;
+  	background-color: white;
+  	border-style: solid;
+	border-width: thin;
+	border-color: #66eece;
+	padding: 0px 12px; 
+	cursor:pointer;
+	 -webkit-appearance: none;
+	 box-sizing: border-box;
+}
+
+#btn_0{
+	width: 50% ;
+}
+
+#btn_equals{
+	background-color: #66eece;
+}
