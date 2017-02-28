@@ -133,7 +133,10 @@ var calculator = {
 var controller = {
 	addEntry: function(val){
 		calculator.updateEntry(val);
-		view.displayEntry(calculator.currentEntry);
+		console.log(parseInt("Error"));
+		if (!/\*|\/|-|\+/.test(calculator.currentEntry)){
+				view.displayEntry(calculator.currentEntry);
+		}
 		view.displayOperation(calculator.currentOperation);
 	}
 };
