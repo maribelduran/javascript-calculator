@@ -1,6 +1,6 @@
 /*https://dribbble.com/colors/66eece?percent=30 */
 /*http://angrytools.com/gradient/*/
-
+/*https://icons8.com/web-app/for/all/clear*/
 body{
 	height: 100%;
 	margin: 0;
@@ -28,18 +28,17 @@ h1{
 .well{
 	margin:auto;
 	width: 340px;
-	padding: 20px;
+	padding: 15px;
 	background-color: white;
-	border-radius: 5px;
 	border-style: solid;
 	border-width: thin;
 	border-color: #ccc;
+	box-shadow:         5px 5px 5px 0px rgba(204, 204, 204, 0.75);
 }
 
 #calculator-content{
 	width: 90%;
 	margin:auto;
-	font-size: 30px;
 }
 
 #entryScreen{
@@ -48,41 +47,78 @@ h1{
 }
 
 #entryField{
-	font-size: 30px;
+	font-size: 60px;
+	padding-bottom: 0;
+	margin-bottom: 0;
 }
 
 #operation{
 	background-color:#30e8bd;
-	padding-bottom: 5px;
+	font-size: 20px;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-bottom: 2px;
 }
 
 .row{
+
   display: flex !important;   
   display: -webkit-flex; /* Safari */
   -webkit-flex-wrap: wrap; /* Safari 6.1+ */
 }
 
+#btn_allClear>img{
+  /*filter: invert(100%);*/
+   height: 28px;
+   width: 28px;
+}
+
 
 button{
 	width: 25%;
-	height: 60px;
-	height: 40px;
-  	font-size: 30px !important;
-  	font-weight: light;
+	height: 70px;
+  	font-size: 24px;
+  	font-weight: lighter;
   	background-color: white;
   	border-style: solid;
+  	border-right: 0;
+  	border-bottom: 0;
 	border-width: thin;
+
 	border-color: #66eece;
+	border-color: #ccc;
 	padding: 0px 12px; 
 	cursor:pointer;
 	 -webkit-appearance: none;
 	 box-sizing: border-box;
 }
 
+
+button:focus{
+  outline: 0;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/*do nth child for row*/
+#btn_divide, #btn_multiply, #btn_subtract, #btn_add, #btn_equals{
+	border-right-style: solid !important;
+
+}
+
+#btn_0, #btn_dec{
+	border-bottom-style: solid !important;
+}
+
+
 #btn_0{
-	width: 50% ;
+	width: 50%;
 }
 
 #btn_equals{
 	background-color: #66eece;
+	border-color: #66eece;
+
 }
