@@ -4,7 +4,7 @@
 body{
 	height: 100%;
 	margin: 0;
-	color: white;
+	
 	font-family: 'Open Sans', sans-serif;
 	/*font-family: 'Roboto', sans-serif;*/
 	background: -moz-linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 49%, #66eece 50%, #66eece 100%); /* ff3.6+ */
@@ -33,7 +33,7 @@ h1{
 	border-style: solid;
 	border-width: thin;
 	border-color: #ccc;
-	box-shadow:         5px 5px 5px 0px rgba(204, 204, 204, 0.75);
+	box-shadow:   5px 5px 5px 0px rgba(204, 204, 204, 0.75);
 }
 
 #calculator-content{
@@ -42,23 +42,33 @@ h1{
 }
 
 #entryScreen{
-	background-color: #66eece;
-	/*background-color: #02b875*/
+	/*background-color: #66eece;
+	background-color: #60B4FE;*/
 	text-align: right;
+
 }
 
 #entryField{
 	font-size: 60px;
 	padding-bottom: 0;
 	margin-bottom: 0;
+	font-weight: lighter;
+	
 }
 
 #operation{
-	background-color:#30e8bd;
+	/*background-color:#30e8bd;*/
 	font-size: 20px;
 	margin-top: 0;
 	margin-bottom: 0;
 	padding-bottom: 2px;
+	font-weight: lighter;
+}
+
+hr{
+	border-color: #66eece;;
+	background-color:#66eece;
+	color: #66eece;;
 }
 
 .row{
@@ -85,7 +95,6 @@ button{
   	border-right: 0;
   	border-bottom: 0;
 	border-width: thin;
-
 	border-color: #66eece;
 	border-color: #ccc;
 	padding: 0px 12px; 
