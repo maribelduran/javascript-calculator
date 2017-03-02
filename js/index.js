@@ -1,6 +1,10 @@
-//Day 50: Tuesday 
-//Finished refactoring code. Finally started calculating JS Calc App!
-//add shortcut keys
+//Day 58: Tuesday 
+//Updated background gradient color.
+
+
+//Fix % button functionality
+//Fix max digit input in EntryScreen
+//Add shortcut keys
 //Create tests https://forum.freecodecamp.com/t/javascript-calculator-project-with-testable-user-stories-guinea-pigs-needed/58941
 
 //view
@@ -49,10 +53,8 @@ var calculator = {
 
 			}else if (!isOperator(this.currentEntry)){
 				//Remove trailing decimal values 
-				if (this.currentEntry.slice(-1) == "."){
-					this.currentEntry = this.currentEntry.replace(/\./, "");
-					this.currentOperation = this.currentOperation.replace(/.$/,"");
-				}
+				this.removeTraililngDecimals();
+	
 				this.currentEntry = val;
 				this.currentOperation +=  " " + val;
 				this.justClearedOperator = false;
@@ -102,11 +104,13 @@ var calculator = {
 				this.currentOperation += val;
 			}	
 		
-		}else if(val == "=" && !justCalculated){
+		}else if(val=="=" && !justCalculated){
 			this.justClearedOperator = this.justClearedNumber = false;
 
 			var lastEntry = this.currentOperation.split(" ").splice(-1);
 			if (!isOperator(lastEntry)){
+
+				this.removeTraililngDecimals();
 				this.total = math.eval(this.currentOperation);
 				this.currentEntry = this.total;
 				this.currentOperation += " = " + this.total;
@@ -116,7 +120,14 @@ var calculator = {
 				this.total = "0";
 			}
 		
-		}else if (val == "allClear"){
+		}else if(val=="%" ){
+				this.total = math.eval(this.currentOperation + " " + "/" + " " + "100");
+				this.currentEntry = this.total;
+				this.currentOperation += "%" + " = " + this.total; 
+
+		}
+
+		else if (val == "allClear"){
 			this.allClear();
 		
 		}else if (val == "clearEntry"){
@@ -127,13 +138,20 @@ var calculator = {
 				this.allClear();
 			}
 		}
+	},
+
+	removeTraililngDecimals: function(){
+		console.log(this.currentEntry.slice(-1));
+		if (this.currentEntry.slice(-1) == "."){
+			this.currentEntry = this.currentEntry.replace(/\./, "");
+			this.currentOperation = this.currentOperation.replace(/.$/,"");
+		}
 	}
 };
 
 var controller = {
 	addEntry: function(val){
 		calculator.updateEntry(val);
-		console.log(parseInt("Error"));
 		if (!/\*|\/|-|\+/.test(calculator.currentEntry)){
 				view.displayEntry(calculator.currentEntry);
 		}
@@ -159,6 +177,7 @@ var view = {
 		 	"btn_subtract": "-",
 		 	"btn_multiply": "*",
 		 	"btn_divide": "/",
+		 	"btn_percent": "%",
 		 	"btn_equals": "=",
 		 	"btn_allClear": "allClear",
 		 	"btn_clearEntry": "clearEntry"
@@ -181,3 +200,6 @@ var view = {
 };
 
 view.addEventListeners();
+$(function(){
+		$('.ripple').materialripple();
+});
