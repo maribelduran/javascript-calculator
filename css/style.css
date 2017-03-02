@@ -44,8 +44,9 @@ body{
 }
 
 #entryScreen{
-	/*background-color: #66eece;
-	background-color: #60B4FE;*/
+	/*background-color: #66eece;*/
+	
+	margin-top: -10px;
 
 }
 
@@ -142,4 +143,14 @@ button::-moz-focus-inner {
 	background: -ms-linear-gradient(54deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 38%, rgba(102,238,206,1) 63%, rgba(102,238,206,1) 100%); /* ie10+ */
 	background: linear-gradient(36deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 38%, rgba(102,238,206,1) 63%, rgba(102,238,206,1) 100%); /* w3c */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66eece', endColorstr='#66a1ee',GradientType=0 ); /* ie6-9 */
+}
+
+@media only screen and (max-width: 550px) {
+  .well{
+  	max-width: 280px;
+  }
+
+  #entryScreen{
+  	margin-top: -50px;
+  }
 }
