@@ -18,7 +18,7 @@ body{
 .container-fluid{
 	width: 100%;
 	margin:auto;
-	margin-top: 40px;
+	margin-top: 60px;
 }
 
 .well{
@@ -46,8 +46,7 @@ body{
 #entryScreen{
 	/*background-color: #66eece;*/
 	
-	margin-top: -30px;
-
+	margin-top: -50px;
 }
 
 #entryField{
@@ -148,7 +147,11 @@ button::-moz-focus-inner {
 @media screen and (min-width:320px) and (max-width:767px) and (orientation:landscape) {
 
 	.well{
-		width: 90%;
+		width: 70%;
+	}
+
+	button{
+		height: 40px;
 	}
 }
 
@@ -158,7 +161,9 @@ button::-moz-focus-inner {
   	width: 300px;
   }
 
-  #entryScreen{
-  
+  .container-fluid{
+  	 margin-top: 30px;
   }
+ 
+
 }
