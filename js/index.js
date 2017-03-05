@@ -1,8 +1,5 @@
-//Day 58: Tuesday 
-//Updated background gradient color.
+//Day 61: Tuesday 
 
-
-//Fix % button functionality
 //Fix max digit input in EntryScreen
 //Add shortcut keys
 //Create tests https://forum.freecodecamp.com/t/javascript-calculator-project-with-testable-user-stories-guinea-pigs-needed/58941
@@ -54,7 +51,6 @@ var calculator = {
 			}else if (!isOperator(this.currentEntry)){
 				//Remove trailing decimal values 
 				this.removeTraililngDecimals();
-	
 				this.currentEntry = val;
 				this.currentOperation +=  " " + val;
 				this.justClearedOperator = false;
@@ -120,14 +116,20 @@ var calculator = {
 				this.total = "0";
 			}
 		
-		}else if(val=="%" ){
-				this.total = math.eval(this.currentOperation + " " + "/" + " " + "100");
-				this.currentEntry = this.total;
+		}else if(val=="%"){
+			if (justCalculated){
+				this.total = math.eval(this.total + "/100");
+				this.currentOperation = this.currentEntry +  "%" + " = " + this.total; 
+			}else{
+				var partial_total = math.eval(this.currentEntry + "/100");
+				var trimmed = this.currentOperation.split(" ");
+				trimmed.splice(-1);
+				trimmed = trimmed.join(" ");
+				this.total = math.eval(trimmed + partial_total);
 				this.currentOperation += "%" + " = " + this.total; 
-
-		}
-
-		else if (val == "allClear"){
+			}
+			this.currentEntry = this.total;
+		}else if (val == "allClear"){
 			this.allClear();
 		
 		}else if (val == "clearEntry"){
@@ -139,9 +141,7 @@ var calculator = {
 			}
 		}
 	},
-
 	removeTraililngDecimals: function(){
-		console.log(this.currentEntry.slice(-1));
 		if (this.currentEntry.slice(-1) == "."){
 			this.currentEntry = this.currentEntry.replace(/\./, "");
 			this.currentOperation = this.currentOperation.replace(/.$/,"");
@@ -200,6 +200,7 @@ var view = {
 };
 
 view.addEventListeners();
+
 $(function(){
 		$('.ripple').materialripple();
 });
