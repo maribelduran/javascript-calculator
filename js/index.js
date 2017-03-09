@@ -1,31 +1,31 @@
-//Day 61: Tuesday 
-
-//Fix max digit input in EntryScreen
-//Add shortcut keys
-//Create tests https://forum.freecodecamp.com/t/javascript-calculator-project-with-testable-user-stories-guinea-pigs-needed/58941
+//Day 64(tues): Continued working on display digit limit 
+//Day 65(Wed): Created a  digit input limit and started working on fixing overflow 
+//in operation string
+//Day 66(Thu): Working on fixing overflow in operation string
 
 //view
 var calculator = {
 	total: "",
-	currentEntry: "0",
-	currentOperation: "0",
+	entry: "0",
+	operation: "0",
 	justClearedOperator: false,
 	justClearedNumber: false,
+	maxEntryChars: 11,
 
 	allClear: function(){
-		this.currentEntry = this.currentOperation = "0";
+		this.entry = this.operation = "0";
 		this.total = "";
 		this.justClearedOperator = this.justClearedNumber = false;
 	},
 	clearEntry: function(){
-		if(this.currentOperation.split(" ").length == 1){
+		if(this.operation.split(" ").length == 1){
 			this.allClear();
 		}else{
-			this.currentEntry = "0";
-			var entryArr = this.currentOperation.split(" ");
+			this.entry = "0";
+			var entryArr = this.operation.split(" ");
 			var removedEntry = entryArr.splice(-1);
-			this.currentOperation = entryArr.join(" ");
-			if ( /\*|\/|-|\+/.test(removedEntry)){
+			this.operation = entryArr.join(" ");
+			if ( /\*|\/|-$|\+/.test(removedEntry)){
 				this.justClearedOperator = true;
 				this.justClearedNumber = false;
 			}
@@ -36,102 +36,101 @@ var calculator = {
 		}
 	},
 	updateEntry: function(val){
-		var justCalculated =  /\=|Error/.test(this.currentOperation);
+		var justCalculated =  /\=|Error/.test(this.operation);
 
 		function isOperator(value){
-			var operators = /\*|\/|-|\+/;
+			var operators = /\*|\/|-$|\+/;
 			return operators.test(value);	
 		}
 	
 		if (isOperator(val) && !this.justClearedNumber){
 			if (justCalculated){
-				this.currentEntry = val;
-				this.currentOperation = this.total + " " + val;
+				this.entry = val;
+				this.operation = this.total + " " + val;
 
-			}else if (!isOperator(this.currentEntry)){
+			}else if (!isOperator(this.entry)){
 				//Remove trailing decimal values 
 				this.removeTraililngDecimals();
-				this.currentEntry = val;
-				this.currentOperation +=  " " + val;
+				this.entry = val;
+				this.operation +=  " " + val;
 				this.justClearedOperator = false;
-			}else if(isOperator(this.currentEntry)){
+			}else if(isOperator(this.entry)){
 				//Replace operator
-				this.currentEntry = val;
-				this.currentOperation = this.currentOperation.replace(/.$/,val);
+				this.entry = val;
+				this.operation = this.operation.replace(/.$/,val);
 			}	
 		
 		}else if (typeof val == 'number' && !this.justClearedOperator){
 			if (justCalculated){
 				this.allClear();
 			}
-			//do not allow leading 0s
-			if(this.currentEntry == "0"){
-				this.currentEntry = "";
-				if (!this.justClearedNumber){
-					this.currentOperation = this.currentOperation.replace(/.$/,"");
+			if (this.entry.length < this.maxEntryChars){
+				//do not allow leading 0s
+				if(this.entry == "0"){
+					this.entry = "";
+					if (!this.justClearedNumber){
+						this.operation = this.operation.replace(/.$/,"");
+					}
+					else{
+						this.operation += " ";
+					}	
 				}
-				else{
-					this.currentOperation += " ";
-				}	
-			}
-			if (isOperator(this.currentEntry)){
-				this.currentEntry = val.toString();
-				this.currentOperation += " " + this.currentEntry;
+				if (isOperator(this.entry)){
+					this.entry = val.toString();
+					this.operation += " " + this.entry;
 
-			}else{ //concatenating numbers
-				this.currentEntry += val.toString();
-				this.currentOperation += val.toString();
-			}
-			this.justClearedNumber = false;
-		
+				}else{ //concatenating numbers
+					this.entry += val.toString();
+					this.operation += val.toString();
+				}
+				this.justClearedNumber = false;
+			}	
 		}else if(val == '.' && !this.justClearedOperator){
 			if (justCalculated){
 				this.allClear();
 			}
-
-			var contains_decimal = /\./.test(this.currentEntry);
+			if (this.entry.length < this.maxEntryChars){
+			var contains_decimal = /\./.test(this.entry);
 			if (!contains_decimal){
-				if (isOperator(this.currentEntry) || this.justClearedNumber){
-				this.currentEntry = "0";
-				this.currentOperation += " " + this.currentEntry;
+				if (isOperator(this.entry) || this.justClearedNumber){
+				this.entry = "0";
+				this.operation += " " + this.entry;
 				
 				}
-				this.currentEntry += val;
-				this.currentOperation += val;
+				this.entry += val;
+				this.operation += val;
+			}
 			}	
-		
 		}else if(val=="=" && !justCalculated){
 			this.justClearedOperator = this.justClearedNumber = false;
 
-			var lastEntry = this.currentOperation.split(" ").splice(-1);
+			var lastEntry = this.operation.split(" ").splice(-1);
 			if (!isOperator(lastEntry)){
 
 				this.removeTraililngDecimals();
-				this.total = math.eval(this.currentOperation);
-				this.currentEntry = this.total;
-				this.currentOperation += " = " + this.total;
+				this.total = math.eval(this.operation);
+				this.entry = this.total;
+				this.operation += " = " + this.total;
 
 			}else{
-				this.currentEntry = this.currentOperation = "Error";
+				this.entry = this.operation = "Error";
 				this.total = "0";
 			}
-		
-		}else if(val=="%"){
+		}else if(val=="%" && !isOperator(this.entry)){
 			if (justCalculated){
 				this.total = math.eval(this.total + "/100");
-				this.currentOperation = this.currentEntry +  "%" + " = " + this.total; 
+				this.operation = this.entry +  "%" + " = " + this.total; 
 			}else{
-				var partial_total = math.eval(this.currentEntry + "/100");
-				var trimmed = this.currentOperation.split(" ");
+				var partial_total = math.eval(this.entry + "/100");
+				var trimmed = this.operation.split(" ");
 				trimmed.splice(-1);
 				trimmed = trimmed.join(" ");
 				this.total = math.eval(trimmed + partial_total);
-				this.currentOperation += "%" + " = " + this.total; 
+				this.operation += "%" + " = " + this.total; 
 			}
-			this.currentEntry = this.total;
+			this.entry = this.total;
 		}else if (val == "allClear"){
 			this.allClear();
-		
 		}else if (val == "clearEntry"){
 			if (!justCalculated){
 				this.clearEntry();
@@ -142,9 +141,9 @@ var calculator = {
 		}
 	},
 	removeTraililngDecimals: function(){
-		if (this.currentEntry.slice(-1) == "."){
-			this.currentEntry = this.currentEntry.replace(/\./, "");
-			this.currentOperation = this.currentOperation.replace(/.$/,"");
+		if (this.entry.slice(-1) == "."){
+			this.entry = this.entry.replace(/\./, "");
+			this.operation = this.operation.replace(/.$/,"");
 		}
 	}
 };
@@ -152,10 +151,10 @@ var calculator = {
 var controller = {
 	addEntry: function(val){
 		calculator.updateEntry(val);
-		if (!/\*|\/|-|\+/.test(calculator.currentEntry)){
-				view.displayEntry(calculator.currentEntry);
+		if (!/\*|\/|-$|\+/.test(calculator.entry)){
+				view.displayEntry(calculator.entry);
 		}
-		view.displayOperation(calculator.currentOperation);
+		view.displayOperation(calculator.operation);
 	}
 };
 
@@ -182,7 +181,7 @@ var view = {
 		 	"btn_allClear": "allClear",
 		 	"btn_clearEntry": "clearEntry"
 		};
-
+		
 		for (var id in btnEntry){
 			document.getElementById(id).addEventListener("click", function(){
 				controller.addEntry(btnEntry[this.id]);
@@ -191,10 +190,26 @@ var view = {
 	},
 	displayEntry: function(val){
 		var entry = document.getElementById("entryField");
-		entry.innerHTML = val;
+		if (val.toString().length > 11){
+			entry.className = "x-small-font";
+		}
+		else{
+			entry.classList.remove("x-small-font");
+		}
+		//entry.classsName = "large-font"
+		entry.innerHTML =  val;
 	},
 	displayOperation: function(val){
 		var operation = document.getElementById("operation");
+		/*if (val.toString().length >28){
+			//get the last 35 characters of the string and then concatenate << to the front of the string.
+			console.log(val);
+			val = "<<" + val.toString().slice(-28);
+		}*/
+		//when overflow is detected, add "<<" 
+		if (operation.scrollHeight > operation.offsetHeight){
+			val = "overflow has occured";
+		}
 		operation.innerHTML = val;
 	}
 };
