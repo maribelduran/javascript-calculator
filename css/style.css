@@ -24,13 +24,12 @@ body{
 .well{
 	margin:auto;
 	width: 340px;
-	padding: 15px;
+	padding: 10px;
 	background-color: white;
 	border-style: solid;
 	border-width: thin;
 	border-color: #ccc;
-	box-shadow:   5px 5px 5px 0px rgba(204, 204, 204, 0.75);
-
+	box-shadow: 5px 5px 5px 0px rgba(204, 204, 204, 0.75);
 }
 
 #calculator-content{
@@ -39,26 +38,33 @@ body{
 	text-align: right;
 	white-space: nowrap;
 	overflow: hidden;
-
-	
 }
 
 #entryScreen{
 	/*background-color: #66eece;*/
 	
-	margin-top: -50px;
+	height: 100px;
 }
 
 #entryField{
-	font-size: 60px;
+	font-size: 48px;
 	padding-bottom: 0;
 	margin-bottom: 0;
 	font-weight: lighter;
+	
+}
+
+.x-small-font{
+	font-size: 25px !important;
+}
+
+.large-font{
+	font-size: 54px 
 }
 
 #operation{
 	/*background-color:#30e8bd;*/
-	font-size: 20px;
+	font-size: 18px;
 	margin-top: 0;
 	margin-bottom: 0;
 	padding-bottom: 2px;
@@ -144,8 +150,20 @@ button::-moz-focus-inner {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66eece', endColorstr='#66a1ee',GradientType=0 ); /* ie6-9 */
 }
 
-@media screen and (min-width:320px) and (max-width:767px) and (orientation:landscape) {
+footer{
+	margin-top: 5px;
+	text-align: center;
+	color: #66a1ee;
+}
 
+a:link {
+  text-decoration: none;
+  outline:none;
+  border:0;
+  color: #66a1ee;
+}
+
+@media screen and (min-width:320px) and (max-width:767px) and (orientation:landscape) {
 	.well{
 		width: 70%;
 	}
@@ -155,15 +173,13 @@ button::-moz-focus-inner {
 	}
 }
 
-
 @media only screen and (max-width: 550px) {
-  .well{
-  	width: 300px;
+  #entryField{
+  /*	font-size: 42px;*/
   }
 
   .container-fluid{
   	 margin-top: 30px;
   }
- 
 
 }
