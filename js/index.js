@@ -1,8 +1,3 @@
-//Day 64(tues): Continued working on display digit limit 
-//Day 65(Wed): Created a  digit input limit and started working on fixing overflow 
-//in operation string
-//Day 66(Thu): Working on fixing overflow in operation string
-
 //view
 var calculator = {
 	total: "",
@@ -116,7 +111,7 @@ var calculator = {
 				this.entry = this.operation = "Error";
 				this.total = "0";
 			}
-		}else if(val=="%" && !isOperator(this.entry)){
+		}else if(val=="%" && !isOperator(this.entry) && this.entry != "Error"){
 			if (justCalculated){
 				this.total = math.eval(this.total + "/100");
 				this.operation = this.entry +  "%" + " = " + this.total; 
@@ -189,7 +184,7 @@ var view = {
 		}
 	},
 	displayEntry: function(val){
-		var entry = document.getElementById("entryField");
+		var entry = document.getElementById("entry");
 		if (val.toString().length > 11){
 			entry.className = "x-small-font";
 		}
