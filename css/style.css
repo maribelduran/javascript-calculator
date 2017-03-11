@@ -25,7 +25,7 @@ body{
 
 .well{
 	margin:auto;
-	width: 340px;
+	width: 320px;
 	padding: 10px;
 	background-color: white;
 	border-style: solid;
@@ -72,7 +72,6 @@ body{
 
 .x-small-font{
 	font-size: 25px !important;
-	padding-bottom: -20px!important;
 }
 
 #operation{
@@ -186,9 +185,7 @@ a:link {
 }
 
 @media only screen and (max-width: 550px) {
-
   .container-fluid{
   	 margin-top: 30px;
   }
-
 }
