@@ -2,11 +2,11 @@
 /*http://angrytools.com/gradient/*/
 /*https://icons8.com/web-app/for/all/clear*/
 
+/*Fix overflow of operation string*/
 
 body{
 	height: 100%;
 	margin: 0;
-	
 	font-family: 'Open Sans', sans-serif;
 	background: -moz-linear-gradient(131deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 24%, rgba(102,238,206,1) 53%, rgba(102,161,238,1) 67%, rgba(102,161,238,1) 69%, rgba(102,161,238,1) 76%, rgba(102,161,238,1) 83%, rgba(102,161,238,1) 100%); /* ff3.6+ */
 	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(102,161,238,1)), color-stop(17%, rgba(102,161,238,1)), color-stop(24%, rgba(102,161,238,1)), color-stop(31%, rgba(102,161,238,1)), color-stop(33%, rgba(102,161,238,1)), color-stop(47%, rgba(102,238,206,1)), color-stop(76%, rgba(255,255,255,1)), color-stop(100%, rgba(255,255,255,1))); /* safari4+,chrome */
@@ -26,7 +26,8 @@ body{
 .well{
 	margin:auto;
 	width: 340px;
-	padding: 10px;
+	padding: 5px;
+	padding-bottom: 10px;
 	background-color: white;
 	border-style: solid;
 	border-width: thin;
@@ -43,17 +44,14 @@ body{
 }
 
 #entryScreen{
-	margin-top: 20px;
+	margin-top: 5px;
 	height: 50px;
- 	border-size: thick;
  	padding-top: 20px;
  	padding-bottom: 20px;
  	position: relative;
 }
 
-
 #entry{
-	font-size: 48px;
 	font-size: 48px;
 	margin-bottom: 0;
 	font-weight: lighter;
@@ -91,7 +89,6 @@ hr {
 	background: -o-linear-gradient(0deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 32%, rgba(102,238,206,1) 69%, rgba(102,238,206,1) 100%); /* opera 11.10+ */
 	background: -ms-linear-gradient(0deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 32%, rgba(102,238,206,1) 69%, rgba(102,238,206,1) 100%); /* ie10+ */
 	background: linear-gradient(90deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 32%, rgba(102,238,206,1) 69%, rgba(102,238,206,1) 100%); /* w3c */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66a1ee', endColorstr='#66eece',GradientType=1 ); /* ie6-9 */
 }
 
 .row{
@@ -102,11 +99,9 @@ hr {
 }
 
 #btn_allClear>img{
-  /*filter: invert(100%);*/
    height: 28px;
    width: 28px;
 }
-
 
 button{
 	width: 25%;
@@ -118,14 +113,12 @@ button{
   	border-right: 0;
   	border-bottom: 0;
 	border-width: thin;
-	border-color: #66eece;
 	border-color: #ccc;
 	padding: 0px 12px; 
 	cursor:pointer;
-	 -webkit-appearance: none;
-	 box-sizing: border-box;
+	-webkit-appearance: none;
+	box-sizing: border-box;
 }
-
 
 button:focus{
   outline: 0;
@@ -138,13 +131,11 @@ button::-moz-focus-inner {
 /*do nth child for row*/
 #btn_divide, #btn_multiply, #btn_subtract, #btn_add, #btn_equals{
 	border-right-style: solid !important;
-
 }
 
 #btn_0, #btn_dec{
 	border-bottom-style: solid !important;
 }
-
 
 #btn_0{
 	width: 50%;
@@ -158,13 +149,12 @@ button::-moz-focus-inner {
 	background: -o-linear-gradient(54deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 38%, rgba(102,238,206,1) 63%, rgba(102,238,206,1) 100%); /* opera 11.10+ */
 	background: -ms-linear-gradient(54deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 38%, rgba(102,238,206,1) 63%, rgba(102,238,206,1) 100%); /* ie10+ */
 	background: linear-gradient(36deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 38%, rgba(102,238,206,1) 63%, rgba(102,238,206,1) 100%); /* w3c */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66eece', endColorstr='#66a1ee',GradientType=0 ); /* ie6-9 */
 }
 
 footer{
 	margin-top: 5px;
 	text-align: center;
-	color: #66a1ee;
+color: #66a1ee;
 }
 
 a:link {
@@ -172,6 +162,10 @@ a:link {
   outline:none;
   border:0;
   color: #66a1ee;
+}
+a:visited{
+	color: #66a1ee;
+	color: #66eece;
 }
 
 @media screen and (min-width:320px) and (max-width:767px) and (orientation:landscape) {
