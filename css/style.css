@@ -2,8 +2,6 @@
 /*http://angrytools.com/gradient/*/
 /*https://icons8.com/web-app/for/all/clear*/
 
-/*Fix overflow of operation string*/
-
 body{
 	height: 100%;
 	margin: 0;
@@ -43,11 +41,15 @@ body{
 	overflow: hidden;
 }
 
-#entryScreen{
-	margin-top: 5px;
+#entryScreen {
 	height: 50px;
- 	padding-top: 20px;
- 	padding-bottom: 20px;
+ 	padding-top: 30px;
+ 	padding-bottom: 5px;
+ 	position: relative;
+}
+
+#operationScreen{
+	height: 30px;
  	position: relative;
 }
 
@@ -61,13 +63,6 @@ body{
 	bottom: 0;
 }
 
-#mydiv h2{
-    display:inline;
-    font: 48px Arial, Helvetica, sans-serif;
-    border-style: solid;
-    border-width: thick;
-}
-
 .x-small-font{
 	font-size: 25px !important;
 }
@@ -78,9 +73,11 @@ body{
 	margin-bottom: 0;
 	padding-bottom: 2px;
 	font-weight: lighter;
+	float: right;
 }
 
 hr {
+	clear: right;
     border: 0;
     height: 2px;
   	background: -moz-linear-gradient(0deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 32%, rgba(102,238,206,1) 69%, rgba(102,238,206,1) 100%); /* ff3.6+ */
@@ -89,6 +86,7 @@ hr {
 	background: -o-linear-gradient(0deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 32%, rgba(102,238,206,1) 69%, rgba(102,238,206,1) 100%); /* opera 11.10+ */
 	background: -ms-linear-gradient(0deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 32%, rgba(102,238,206,1) 69%, rgba(102,238,206,1) 100%); /* ie10+ */
 	background: linear-gradient(90deg, rgba(102,161,238,1) 0%, rgba(102,161,238,1) 32%, rgba(102,238,206,1) 69%, rgba(102,238,206,1) 100%); /* w3c */
+	
 }
 
 .row{
