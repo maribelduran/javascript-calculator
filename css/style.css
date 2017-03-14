@@ -1,7 +1,3 @@
-/*https://dribbble.com/colors/66eece?percent=30 */
-/*http://angrytools.com/gradient/*/
-/*https://icons8.com/web-app/for/all/clear*/
-
 body{
 	height: 100%;
 	margin: 0;
@@ -12,7 +8,6 @@ body{
 	background: -o-linear-gradient(131deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 24%, rgba(102,238,206,1) 53%, rgba(102,161,238,1) 67%, rgba(102,161,238,1) 69%, rgba(102,161,238,1) 76%, rgba(102,161,238,1) 83%, rgba(102,161,238,1) 100%); /* opera 11.10+ */
 	background: -ms-linear-gradient(131deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 24%, rgba(102,238,206,1) 53%, rgba(102,161,238,1) 67%, rgba(102,161,238,1) 69%, rgba(102,161,238,1) 76%, rgba(102,161,238,1) 83%, rgba(102,161,238,1) 100%); /* ie10+ */
 	background: linear-gradient(319deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 24%, rgba(102,238,206,1) 53%, rgba(102,161,238,1) 67%, rgba(102,161,238,1) 69%, rgba(102,161,238,1) 76%, rgba(102,161,238,1) 83%, rgba(102,161,238,1) 100%); /* w3c */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66a1ee', endColorstr='#ffffff',GradientType=0 ); /* ie6-9 */
 }
 
 .container-fluid{
@@ -90,7 +85,6 @@ hr {
 }
 
 .row{
-
   display: flex !important;   
   display: -webkit-flex; /* Safari */
   -webkit-flex-wrap: wrap; /* Safari 6.1+ */
@@ -126,7 +120,6 @@ button::-moz-focus-inner {
   border: 0;
 }
 
-/*do nth child for row*/
 #btn_divide, #btn_multiply, #btn_subtract, #btn_add, #btn_equals{
 	border-right-style: solid !important;
 }
@@ -152,17 +145,16 @@ button::-moz-focus-inner {
 footer{
 	margin-top: 5px;
 	text-align: center;
-color: #66a1ee;
+	color: #66a1ee;
 }
 
 a:link {
   text-decoration: none;
   outline:none;
   border:0;
-  color: #66a1ee;
+  color: #66eece;
 }
 a:visited{
-	color: #66a1ee;
 	color: #66eece;
 }
 
